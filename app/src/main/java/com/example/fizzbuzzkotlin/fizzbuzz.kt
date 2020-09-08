@@ -1,7 +1,17 @@
 package com.example.fizzbuzzkotlin
 
+import java.lang.Exception
+import java.util.Scanner
+
 fun main() {
-    fizzbuzz(200)
+    try {
+        val reader = Scanner(System.`in`)
+        print("Enter maximum number for FizzBuzz: ")
+        val limit:Int = reader.nextInt()
+        fizzbuzz(limit)
+    } catch (e: Exception) {
+        println("Invalid input")
+    }
 }
 
 private fun fizzbuzz(x: Int) {
@@ -22,6 +32,9 @@ private fun fizzbuzz(x: Int) {
                     break
                 }
             }
+        }
+        if (i % 17 == 0) {
+            result.reverse()
         }
         if (result.isNullOrEmpty()){
             allResults.add(i.toString())
