@@ -17,28 +17,24 @@ fun main() {
 }
 
 private fun fizzbuzz(upperLimit: Int = 100) {
-    val ruleWords = mapOf(
-        3 to "Fizz",
-        5 to "Buzz",
-        7 to "Bang",
-        11 to "Bong",
-        13 to "Fezz",
-        17 to ""
+    data class Rule(
+        val word: String,
+        val function: (currentOutput: MutableList<String>, ruleWord: String) -> MutableList<String>
     )
-    val ruleFunctions = mapOf(
-        3 to ::appendRule,
-        5 to  ::appendRule,
-        7 to ::appendRule,
-        11 to ::clearAndReplaceRule,
-        13 to ::addBeforeFirstBRule,
-        17 to ::reverseRule
+    val rules = mapOf<Int, Rule>(
+        3 to Rule("Fizz", ::appendRule),
+        5 to Rule("Buzz", ::appendRule),
+        7 to Rule("Bang", ::appendRule),
+        11 to Rule("Bong", ::clearAndReplaceRule),
+        13 to Rule("Fezz", ::addBeforeFirstBRule),
+        17 to Rule("", ::reverseRule)
     )
 
     val allResults = mutableListOf<String>()
     for (i in 1..upperLimit) {
         var result = mutableListOf<String>()
-        for ((key, value) in ruleWords.entries) {
-            result = generalRuleCase(i, result, key, value, ruleFunctions.get(key))
+        for ((ruleNumber, ruleDefinition) in rules.entries) {
+            result = generalRuleCase(i, result, ruleNumber, ruleDefinition.word, ruleDefinition.function)
         }
         allResults.add(generateOutputLine(result, i))
     }
@@ -51,8 +47,9 @@ private fun generalRuleCase(
     currentOutput: MutableList<String>,
     ruleNumber: Int,
     ruleWord: String,
-    ruleFunction: (currentOutput: MutableList<String>, ruleWord: String) -> MutableList<String> ): MutableList<String> {
-    var result = mutableListOf<String>()
+    ruleFunction: (currentOutput: MutableList<String>, ruleWord: String) -> MutableList<String>
+): MutableList<String> {
+    var result = currentOutput
     if (countNumber % ruleNumber == 0) {
         result = ruleFunction(currentOutput, ruleWord)
     }
