@@ -13,7 +13,6 @@ fun main() {
     } catch (e: Exception) {
         println("Invalid input")
     }
-
 }
 
 private fun fizzbuzz(upperLimit: Int = 100) {
@@ -27,7 +26,8 @@ private fun fizzbuzz(upperLimit: Int = 100) {
         7 to Rule("Bang", ::appendRule),
         11 to Rule("Bong", ::clearAndReplaceRule),
         13 to Rule("Fezz", ::addBeforeFirstBRule),
-        17 to Rule("", ::reverseRule)
+        17 to Rule("", ::reverseRule),
+        19 to Rule("", ::flipAllStrings)
     )
 
     val allResults = mutableListOf<String>()
@@ -82,6 +82,14 @@ private fun addBeforeFirstBRule(currentOutput: MutableList<String>, ruleWord: St
     return currentOutput
 }
 
+private fun flipAllStrings(currentOutput: MutableList<String>, ruleWord: String): MutableList<String> {
+    val newOutput = mutableListOf<String>()
+    for (string in currentOutput) {
+        newOutput.add(string.reversed())
+    }
+    return newOutput
+}
+
 private fun generateOutputLine(arr: MutableList<String>, countNumber: Int): String {
     var outputLine = arr.joinToString("")
     if (outputLine.isBlank()) {
@@ -89,3 +97,4 @@ private fun generateOutputLine(arr: MutableList<String>, countNumber: Int): Stri
     }
     return outputLine
 }
+
