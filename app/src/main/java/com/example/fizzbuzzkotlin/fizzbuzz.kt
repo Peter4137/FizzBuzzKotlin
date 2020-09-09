@@ -1,6 +1,5 @@
 package com.example.fizzbuzzkotlin
 
-import android.os.LimitExceededException
 import java.lang.Exception
 import java.util.Scanner
 
@@ -18,19 +17,28 @@ fun main() {
 }
 
 private fun fizzbuzz(upperLimit: Int = 100) {
-    val rules = mapOf(
-        3 to listOf("Fizz", ::appendRule),
-        5 to listOf("Buzz", ::appendRule),
-        7 to listOf("Bang", ::appendRule),
-        11 to listOf("Bong", ::clearAndReplaceRule),
-        13 to listOf("Fezz", ::addBeforeFirstBRule),
-        17 to listOf("", ::reverseRule))
+    val ruleWords = mapOf(
+        3 to "Fizz",
+        5 to "Buzz",
+        7 to "Bang",
+        11 to "Bong",
+        13 to "Fezz",
+        17 to ""
+    )
+    val ruleFunctions = mapOf(
+        3 to ::appendRule,
+        5 to  ::appendRule,
+        7 to ::appendRule,
+        11 to ::clearAndReplaceRule,
+        13 to ::addBeforeFirstBRule,
+        17 to ::reverseRule
+    )
 
     val allResults = mutableListOf<String>()
     for (i in 1..upperLimit) {
         var result = mutableListOf<String>()
-        for ((key, value) in rules.entries) {
-            result = generalRuleCase(i, result, key, value[0], value[1])
+        for ((key, value) in ruleWords.entries) {
+            result = generalRuleCase(i, result, key, value, ruleFunctions.get(key))
         }
         allResults.add(generateOutputLine(result, i))
     }
@@ -42,7 +50,7 @@ private fun generalRuleCase(
     countNumber: Int,
     currentOutput: MutableList<String>,
     ruleNumber: Int,
-    ruleWord: Any,
+    ruleWord: String,
     ruleFunction: (currentOutput: MutableList<String>, ruleWord: String) -> MutableList<String> ): MutableList<String> {
     var result = mutableListOf<String>()
     if (countNumber % ruleNumber == 0) {
